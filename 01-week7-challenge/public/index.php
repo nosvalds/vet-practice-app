@@ -23,8 +23,15 @@ FROM animals ORDER BY age;';
 
 $result = mysqli_query($db_connection, $query);
 
+// if (mysqli_num_rows($result) > 0){
+// 	while($row = mysqli_fetch_assoc($result)){
+// 		var_dump($row);
+// 	}
+// }
+
 if (mysqli_num_rows($result) > 0){
 	while($row = mysqli_fetch_assoc($result)){
-		var_dump($row);
+		echo $row['Pet Name'].' is '.$row['age'].' years old! he was born '.$row['Birthday'];
+echo '<br />';
 	}
 }
