@@ -11,6 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+       DB::table('owners')->insert(factory(App\Owner::class,100)->make()->toArray());
     }
 }
