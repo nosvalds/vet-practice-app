@@ -18,4 +18,12 @@ class Owner extends Model
         return "{$this->address_1}, {$this->address_2}, {$this->town}, {$this->postcode}";
     }
 
+    // phone number
+    public function formattedPhoneNumber()
+    {
+        $number = $this->telephone;
+        return substr($number, 0, 4) . " " .
+               substr($number, 4, 3) . " " .
+               substr($number, 7, 4);
+    }
 }
