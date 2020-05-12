@@ -50,3 +50,18 @@ $owner->address_2 = "Far Far Away";
 $owner->town = "Tattonine";
 $owner->postcode = "999999";
 $owner->save();
+
+
+// Queries
+
+// town = Bristol
+$results = Owner::where('town','Bristol')->get();
+
+// Order alphabetically by last names
+$results = Owner::orderBy('last_name', 'desc')->get();
+
+// Get back just the owners who have a telephone number starting with 0117
+$results = Owner::where('telephone', 'like', '559%')->get();
+
+
+// Seeding
