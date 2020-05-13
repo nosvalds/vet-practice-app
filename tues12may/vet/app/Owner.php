@@ -26,4 +26,14 @@ class Owner extends Model
                substr($number, 4, 3) . " " .
                substr($number, 7, 4);
     }
+
+    // return time they have been a customer for
+    public function customerSince()
+    {
+        $result = $this->created_at;
+        if ($result !== null) {
+            return $result->diffForHumans();
+        }
+        return "Unknown for this customer";
+    }
 }
