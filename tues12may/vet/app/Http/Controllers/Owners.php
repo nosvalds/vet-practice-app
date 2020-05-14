@@ -15,6 +15,7 @@ class Owners extends Controller
             $search_string = $search_string . "%";
             $owners = Owner::where('first_name', 'like', $search_string); // first name search
             $owners = Owner::where('last_name', 'like', $search_string)->union($owners)->paginate(10); // union last name search + paginate
+            dd($owners);
             return view("welcome",['page' => 'Owners','owners' => $owners]);
         }
         $owners = Owner::paginate(10);
