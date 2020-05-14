@@ -4,8 +4,7 @@
     "Wildlife Supreme - $page"
 }}@endsection
 
-@section('welcome')
-    <h1>Welcome to Wildlife Supremes Vet Service</h1>
+@section('content')
     <h2>{{ $page }}:</h2>
 
     @if ($page === 'Home')
