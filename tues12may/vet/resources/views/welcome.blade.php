@@ -10,6 +10,7 @@
     @if ($page === 'Home')
         <h2>Good {{ $timeOfDay }}!</h2>
     @elseif ($page === 'Owner')
+        
         @include("_parts/owners/list-item", ["owner" => $owner]) 
     @else
         @if ($owners->count() === 0)
@@ -27,6 +28,8 @@
             </div>
         @endif
     @endif
+
+    <a class="btn btn-primary" href="/owners/create" role="button">Add New Owner<a>
     
     
 @endsection
