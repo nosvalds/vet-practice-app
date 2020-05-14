@@ -8,8 +8,16 @@ use App\Http\Requests\OwnerRequest;
 
 class Owners extends Controller
 {
-    public function index() {
-        $owners = Owner::simplePaginate(5);
+    public function index(Request $request) 
+    {
+        $search_string = $request->query("search_string");
+        if ($search_string !== null) {
+            $search_string = $search_string . "%";
+            $owners = Owner::where('first_name', 'like', $search_string); // first name search
+            $owners = Owner::where('last_name', 'like', $search_string)->union($owners)->paginate(10); // union last name search + paginate
+            return view("welcome",['page' => 'Owners','owners' => $owners]);
+        }
+        $owners = Owner::paginate(10);
         return view("welcome",['page' => 'Owners','owners' => $owners]);
     }
 
@@ -36,5 +44,10 @@ class Owners extends Controller
     public function edit(Owner $owner)
     {
         return view("owners/form", ['page' => 'Modify Owner','owner' => $owner]);
+    }
+
+    public function search()
+    {       
+        dd("hello");
     }
 }

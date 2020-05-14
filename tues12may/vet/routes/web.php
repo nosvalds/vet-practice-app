@@ -25,5 +25,8 @@ Route::post('/owners/create', "Owners@createOwner");
 // Owner Edit
 Route::get('/owners/edit/{owner}', "Owners@edit");
 
-// 1 owner display
+// single owner display
 Route::get('/owners/{owner}', "Owners@show");
+
+// search owners
+//Route::get('/owners/', "Owners@search");

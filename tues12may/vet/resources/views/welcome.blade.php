@@ -24,7 +24,7 @@
             </div>
             <div class="container">
                 {{-- Pagination Links --}}
-                {{ $owners->links() }}
+                {{ $owners->withQueryString()->links() }}
             </div>
         @endif
     @endif
