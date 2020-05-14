@@ -19,8 +19,9 @@ class Owners extends Controller
     }
 
     public function create()
-    {
-        return view("owners/form", ['page' => 'Create Owner']);
+    {   
+        $blankOwner = new Owner; // pass in empty owner object so our ternary operators don't break
+        return view("owners/form", ['page' => 'Create Owner', 'owner' => $blankOwner]);
     }
 
     public function createOwner(OwnerRequest $request)
@@ -30,5 +31,10 @@ class Owners extends Controller
         $owner = Owner::create($data); // save into DB
 
         return redirect("/owners/{$owner->id}"); // send them to the owner they just submitted
+    }
+
+    public function edit(Owner $owner)
+    {
+        return view("owners/form", ['page' => 'Modify Owner','owner' => $owner]);
     }
 }

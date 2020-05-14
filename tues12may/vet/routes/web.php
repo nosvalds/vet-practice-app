@@ -22,5 +22,8 @@ Route::get('/owners', "Owners@index");
 Route::get('/owners/create', "Owners@create");
 Route::post('/owners/create', "Owners@createOwner");
 
+// Owner Edit
+Route::get('/owners/edit/{owner}', "Owners@edit");
+
 // 1 owner display
 Route::get('/owners/{owner}', "Owners@show");
