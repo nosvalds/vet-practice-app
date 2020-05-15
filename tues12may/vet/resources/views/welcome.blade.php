@@ -5,15 +5,20 @@
 }}@endsection
 
 @section('content')
-    <h2>{{ $page }}:</h2>
+    <h2>{{ $page }}</h2>
 
     @if ($page === 'Home')
         <h2>Good {{ $timeOfDay }}!</h2>
     @elseif ($page === 'Owner')
         @include("_parts/owners/list-item", ["owner" => $owner]) 
-        @foreach ($owner->animals as $animal)
-            @include("_parts/animals/list-item", ["animal" => $animal])
-        @endforeach
+        <h2>Animals</h2>
+        @if ($owner->animals->count() === 0)
+            <h4>This owner does not have any animals</h4>
+        @else
+            @foreach ($owner->animals as $animal)
+                @include("_parts/animals/list-item", ["animal" => $animal])
+            @endforeach
+        @endif
         <a class="btn btn-primary" href="/owners/edit/{{ $owner->id }}" role="button">Modify Owner<a>
     @else
         @if ($owners->count() === 0)
