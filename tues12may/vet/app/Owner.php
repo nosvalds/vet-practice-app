@@ -37,4 +37,10 @@ class Owner extends Model
         }
         return "Unknown for this customer";
     }
+
+    // setting up link between animals and owners
+    public function animals()
+    {
+        return $this->hasMany(Animal::class);
+    }
 }

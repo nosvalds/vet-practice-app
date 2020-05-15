@@ -11,6 +11,9 @@
         <h2>Good {{ $timeOfDay }}!</h2>
     @elseif ($page === 'Owner')
         @include("_parts/owners/list-item", ["owner" => $owner]) 
+        @foreach ($owner->animals as $animal)
+            @include("_parts/animals/list-item", ["animal" => $animal])
+        @endforeach
         <a class="btn btn-primary" href="/owners/edit/{{ $owner->id }}" role="button">Modify Owner<a>
     @else
         @if ($owners->count() === 0)
