@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Animal extends Model
 {
+    protected $fillable = ["name", "date_of_birth", "type", "weight", "height", "biteyness", "owner_id"]; // designates which fields should be filled in the DB.
     // setting up link between animals and owners
     public function owner()
     {

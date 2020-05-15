@@ -1,4 +1,4 @@
-@extends('app');
+@extends('app')
 
 @section('title'){{
     "Wildlife Supreme - $page"
@@ -19,6 +19,7 @@
                 @include("_parts/animals/list-item", ["animal" => $animal])
             @endforeach
         @endif
+        @include("_parts/animals/form", ["owner" => $owner])
         <a class="btn btn-primary" href="/owners/edit/{{ $owner->id }}" role="button">Modify Owner<a>
     @else
         @if ($owners->count() === 0)
@@ -37,7 +38,6 @@
         @endif
     @endif
 
-    <a class="btn btn-primary" href="/owners/create" role="button">Add New Owner<a>
-    
+    <a class="btn btn-primary" href="/owners/create" role="button">Add New Owner</a>
     
 @endsection

@@ -25,8 +25,10 @@ Route::post('/owners/create', "Owners@createOwner");
 // Owner Edit
 Route::get('/owners/edit/{owner}', "Owners@edit");
 
-// single owner display
+// single owner display, add Animal on owner page
+Route::post('/owners/{owner}', "Owners@addAnimal");
 Route::get('/owners/{owner}', "Owners@show");
 
-// search owners
-//Route::get('/owners/', "Owners@search");
+// Animals
+Route::get('/animals', "Animals@index");
+Route::get('/animals/{animal}', "Animals@show");

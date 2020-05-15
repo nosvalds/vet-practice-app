@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Owner;
+use App\Animal;
 use App\Http\Requests\OwnerRequest;
+use App\Http\Requests\AnimalRequest;
+
 
 class Owners extends Controller
 {
@@ -22,7 +25,7 @@ class Owners extends Controller
         return view("welcome",['page' => 'Owners','owners' => $owners]);
     }
 
-    public function show(Owner $owner) // Route Model Binding automatically pulls Owner->find({id});
+    public function show(Owner $owner, Request $request) // Route Model Binding automatically pulls Owner->find({id});
     {
         return view("welcome",['page' => 'Owner','owner' => $owner]);
     }
@@ -47,8 +50,12 @@ class Owners extends Controller
         return view("owners/form", ['page' => 'Modify Owner','owner' => $owner]);
     }
 
-    public function search()
-    {       
-        dd("hello");
+    public function addAnimal(Owner $owner, AnimalRequest $request)
+    {
+        $data = $request->all(); // turn request into array
+        $id = $owner->id; // get owner id
+        $data['owner_id'] = $id; // set owner id to associate animal with the owner
+        $animal = Animal::create($data); // save to DB
+        return redirect("/owners/{$id}"); // redirect to owners page
     }
 }
