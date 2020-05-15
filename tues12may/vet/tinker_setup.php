@@ -65,3 +65,10 @@ $results = Owner::where('telephone', 'like', '559%')->get();
 
 
 // Seeding
+
+// User
+$user = new User();
+$user->name = "Nik Osvalds";
+$user->email = "nosvalds@gmail.com";
+$user->password = Hash::make("hello");
+$user->save();

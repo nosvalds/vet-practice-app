@@ -15,20 +15,33 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', "Home@index");
 
-// All owners display
-Route::get('/owners', "Owners@index");
+// /owners
+Route::group(["prefix" => "owners"], function () {
+    // All owners display
+    Route::get('/', "Owners@index");
+    
+    // Only logged in users
+    Route::group(["middleware"=> "auth"], function () {
 
-// Owner Entry
-Route::get('/owners/create', "Owners@create");
-Route::post('/owners/create', "Owners@createOwner");
-
-// Owner Edit
-Route::get('/owners/edit/{owner}', "Owners@edit");
-
-// single owner display, add Animal on owner page
-Route::post('/owners/{owner}', "Owners@addAnimal");
-Route::get('/owners/{owner}', "Owners@show");
+        // Owner Entry
+        Route::get('/create', "Owners@create");
+        Route::post('/create', "Owners@createOwner");
+    
+        // Owner Edit
+        Route::get('/edit/{owner}', "Owners@edit");
+    
+        // single owner display, add Animal on owner page
+        Route::post('/{owner}', "Owners@addAnimal");
+    });
+    Route::get('/{owner}', "Owners@show");
+});
 
 // Animals
-Route::get('/animals', "Animals@index");
-Route::get('/animals/{animal}', "Animals@show");
+Route::group(["prefix" => "animals"], function () {
+    Route::get('/', "Animals@index");
+    Route::get('/{animal}', "Animals@show");
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

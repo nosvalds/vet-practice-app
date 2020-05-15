@@ -21,5 +21,13 @@
             <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_string" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search Owners</button>
         </form>
+        @if ($user)
+            {{ $user }}
+        @else
+            <a class="btn btn-primary" href="/login" role="button">Login</a>
+        @endif
+        
+
+
     </nav>
 </header>
