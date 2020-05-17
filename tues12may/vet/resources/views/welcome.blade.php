@@ -6,7 +6,7 @@
 
 @section('content')
     @if ($page === 'Home')
-        <h2 class="text-center text-primary pb-4">Good {{ $timeOfDay }}</h2>
+        <h2 class="text-center text-primary pb-4">Good {{ $timeOfDay }} {{$user->name}}!</h2>
         <div class="container">
             <img class="rounded mx-auto d-block img-fluid" src="http://placekitten.com/1000/800" alt="placeholder kitten">
         </div>
