@@ -43,6 +43,6 @@ Route::group(["prefix" => "animals"], function () {
     Route::get('/{animal}', "Animals@show");
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/home', "Home@index")->name('home');

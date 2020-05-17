@@ -18,11 +18,15 @@
             </ul>
         </div>
         <form class="form-inline mr-sm-2" method="get" action="/owners/">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_string" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search Owners</button>
+            <button class="btn btn-outline-success mr-sm-2 my-2 my-sm-0" type="submit">Search Owners</button>
+            <input class="form-control" type="search" placeholder="Search" name="search_string" aria-label="Search">
         </form>
         @if ($logged_in ?? '') {{-- If logged in = true indicate that --}}
-            <a class="btn btn-primary" href="/login" role="button">{{ $user->name }}</a>
+            <a class="btn btn-primary mr-2" href="/login" role="button">{{ $user->name }}</a>
+            <form method="post" action="/logout">
+                @csrf {{-- security feature --}}
+                <button class="btn btn-secondary">Logout</button>
+            </form>
         @else  {{-- If not logged in, login button --}}
             <a class="btn btn-primary" href="/login" role="button">Login</a>
         @endif

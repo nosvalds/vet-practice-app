@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Owner;
-use App\Animal;
-use App\Http\Requests\OwnerRequest;
-use App\Http\Requests\AnimalRequest;
 use Auth;
+use App\User;
+use App\Owner;
+use App\Http\Requests\OwnerRequest;
+use App\Animal;
+use App\Http\Requests\AnimalRequest;
 
 class Owners extends Controller
 {
@@ -16,8 +17,8 @@ class Owners extends Controller
         $search_string = $request->query("search_string");
         if ($search_string !== null) {
             $search_string = $search_string . "%";
-            $owners = Owner::where('first_name', 'like', $search_string); // first name search
-            $owners = Owner::where('last_name', 'like', $search_string)->union($owners)->paginate(10); // union last name search + paginate
+            $owners = Owner::where('last_name', 'like', $search_string)->orderBy('last_name', 'desc'); // last name search
+            $owners = Owner::where('first_name', 'like', $search_string)->orderBy('first_name', 'desc')->union($owners)->paginate(10); // union last name search + paginate
             $page = "Search Results";
         } else {
             $owners = Owner::paginate(10);
