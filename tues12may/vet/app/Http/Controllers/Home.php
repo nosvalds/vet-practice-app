@@ -6,14 +6,13 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use Auth;
+use App\User;
 
 class Home extends Controller
 {
     // index
     public function index()
     {
-        $user = Auth::user();
-
         $hour = Carbon::now()->hour;
         if ($hour < 12) {
             $timeOfDay = "Morning";
@@ -22,6 +21,15 @@ class Home extends Controller
         } else {
             $timeOfDay = "Evening";
         }
-        return view("welcome",['page' => 'Home', 'timeOfDay' => $timeOfDay, 'user' => $user]);
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            $login = true;
+        } else {
+            $user = new User; // pass in empty user object so our ternary operators don't break
+            $login = false;
+        }
+
+        return view("welcome",['page' => 'Home', 'logged_in' => $login, 'user' => $user, 'timeOfDay' => $timeOfDay]);
     }
 }

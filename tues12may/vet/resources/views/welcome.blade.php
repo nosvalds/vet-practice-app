@@ -5,40 +5,56 @@
 }}@endsection
 
 @section('content')
-    {{-- <h2>{{ $page }}</h2> --}}
-
     @if ($page === 'Home')
-        <h2>Good {{ $timeOfDay }}</h2>
+        <h2 class="text-center text-primary pb-4">Good {{ $timeOfDay }}</h2>
+        <div class="container">
+            <img class="rounded mx-auto d-block img-fluid" src="http://placekitten.com/1000/800" alt="placeholder kitten">
+        </div>
     @elseif ($page === 'Owner')
-        @include("_parts/owners/list-item", ["owner" => $owner]) 
-        <a class="btn btn-primary" href="/owners/edit/{{ $owner->id }}" role="button">Modify Owner<a>
-        <a class="btn btn-primary" href="/owners/create" role="button">Add New Owner</a>
+        <div class="container mb-2">
+            <h3 class="list-group-item active display-5">{{ $page }}</h3>
+            @include("_parts/owners/list-item", ["owner" => $owner]) 
+        </div>
 
-        <h2>Animals</h2>
-        @if ($owner->animals->count() === 0)
-            <h4>This owner does not have any animals</h4>
-        @else
-            @foreach ($owner->animals as $animal)
-                @include("_parts/animals/list-item", ["animal" => $animal])
-            @endforeach
-        @endif
+        <div class="btn-group d-block text-center mb-4" role="group" aria-label="Add Modify buttons">
+            <a class="btn btn-secondary" href="/owners/edit/{{ $owner->id }}" role="button">Modify Owner<a>
+            <a class="btn btn-secondary" href="/owners/create" role="button">Add New Owner</a>
+        </div>
+
+        <div class="container mb-4">
+            <h3 class="list-group-item active display-5 rounded-top">Animals</h3>
+            @if ($owner->animals->count() === 0)
+                <h4>This owner does not have any animals</h4>
+            @else
+                @foreach ($owner->animals as $animal)
+                    @include("_parts/animals/list-item", ["animal" => $animal])
+                @endforeach
+            @endif
+        </div>
         @include("_parts/animals/form", ["owner" => $owner])
     @else
         @if ($owners->count() === 0)
-            <h3>No owners found!</h3>
+            <h3 class="mb-2">No owners found!</h3>
         @else
-            <div class="container">
+            <div class="container mb-2">
+                <h2 class="list-group-item active display-5">{{ $page }} </h2>
+                <div class="container d-flex justify-content-center">
+                    {{ $owners->withQueryString()->links() }}
+                </div>
                 @foreach ($owners as $owner)
                     {{-- pass-through $owner as "owner" --}}
                     @include("_parts/owners/list-item", ["owner" => $owner])
                 @endforeach
             </div>
-            <div class="container">
+            <div class="container d-flex justify-content-center">
                 {{-- Pagination Links --}}
                 {{ $owners->withQueryString()->links() }}
             </div>
         @endif
-        <a class="btn btn-primary" href="/owners/create" role="button">Add New Owner</a>
+        <div class="container d-flex justify-content-center mb-4">
+            <a class="btn btn-secondary" href="/owners/create" role="button">Add New Owner</a>
+        </div>
+        
     @endif
 
     

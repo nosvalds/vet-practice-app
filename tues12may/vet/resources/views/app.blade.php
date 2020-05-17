@@ -13,7 +13,9 @@
   <body>
     <div class="container">
         @include('_parts/header_nav')
-        <h1>Welcome to Wildlife Supreme's Vet Service</h1>
+        <div class="jumbotron">
+          <h1 class="display-3 text-center">Wildlife Supreme Vet Service</h1>
+        </div>
         <main>
             @yield('content')
         </main>

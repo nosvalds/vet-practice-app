@@ -29,6 +29,7 @@ Route::group(["prefix" => "owners"], function () {
     
         // Owner Edit
         Route::get('/edit/{owner}', "Owners@edit");
+        Route::post('/edit/{owner}', "Owners@editOwner");
     
         // single owner display, add Animal on owner page
         Route::post('/{owner}', "Owners@addAnimal");
@@ -44,4 +45,4 @@ Route::group(["prefix" => "animals"], function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', "Home@index")->name('home');

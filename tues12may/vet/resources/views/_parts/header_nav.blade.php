@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/owners">Owners</a>
@@ -17,17 +17,14 @@
                 </li>
             </ul>
         </div>
-        <form class="form-inline" method="get" action="/owners/">
+        <form class="form-inline mr-sm-2" method="get" action="/owners/">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_string" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search Owners</button>
         </form>
-        @if ($user)
-            {{ $user }}
-        @else
+        @if ($logged_in ?? '') {{-- If logged in = true indicate that --}}
+            <a class="btn btn-primary" href="/login" role="button">{{ $user->name }}</a>
+        @else  {{-- If not logged in, login button --}}
             <a class="btn btn-primary" href="/login" role="button">Login</a>
         @endif
-        
-
-
     </nav>
 </header>
