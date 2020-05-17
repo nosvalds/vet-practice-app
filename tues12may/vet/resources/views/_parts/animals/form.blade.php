@@ -52,8 +52,8 @@
                 @enderror
             </div>
             <div class="form-group col-md-2">
-                <label for="height">Height (m)</label>
-                <input type="number" class="form-control @error('height') is-invalid @enderror" id="height" name="height" value="{{ old('height') {{-- ? old('height') : $animal->height --}} }}" placeholder="" step="0.01" required>
+                <label for="height">Height (cm)</label>
+                <input type="number" class="form-control @error('height') is-invalid @enderror" id="height" name="height" value="{{ old('height') {{-- ? old('height') : $animal->height --}} }}" placeholder="" step="1" max="500" required>
                 @error('height')
                         <p class="invalid-feedback">
                             {{ $message }}

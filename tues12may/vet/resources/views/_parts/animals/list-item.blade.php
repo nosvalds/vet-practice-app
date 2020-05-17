@@ -10,7 +10,7 @@
         </div>
         <div class="d-flex flex-column align-items-end">
             <p>{{ $animal->weight }} kg</p>
-            <p>{{ $animal->height }} m</p>
+            <p>{{ $animal->height }} cm</p>
         </div>
     </div>
 </a>

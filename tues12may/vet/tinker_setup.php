@@ -72,3 +72,27 @@ $user->name = "Nik Osvalds";
 $user->email = "nosvalds@gmail.com";
 $user->password = Hash::make("hello");
 $user->save();
+
+$user = new User();
+$user->name = "Heather Myatt";
+$user->email = "myatt.heather@gmail.com";
+$user->password = Hash::make("password");
+$user->save();
+
+$user = new User();
+$user->name = "Billy Bob";
+$user->email = "b.bob@gmail.com";
+$user->password = Hash::make("password");
+$user->save();
+
+$user = new User();
+$user->name = "Elizabeth Borton";
+$user->email = "e.bort@gmail.com";
+$user->password = Hash::make("password");
+$user->save();
+
+$user = new User();
+$user->name = "Charles Bolton";
+$user->email = "c.bolt@gmail.com";
+$user->password = Hash::make("password");
+$user->save();
