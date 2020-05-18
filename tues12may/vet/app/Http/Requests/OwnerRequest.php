@@ -31,6 +31,7 @@ class OwnerRequest extends FormRequest
             "address_2" => ["required", "string","max:100"],
             "town" => ["required", "string","max:100"],
             "postcode" => ["required", "string","max:10"],
+            "user_id" => ["required"]
         ];
     }
 }
