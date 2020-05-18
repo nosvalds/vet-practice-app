@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API\Owners;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use App\Owner;
 use App\Animal;
+use App\Http\Requests\API\AnimalRequest as Request;
 
 class Animals extends Controller
 {

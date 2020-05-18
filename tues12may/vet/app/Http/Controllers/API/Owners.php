@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use App\Owner;
+use App\Http\Requests\API\OwnerRequest as Request;
 
 class Owners extends Controller
 {
