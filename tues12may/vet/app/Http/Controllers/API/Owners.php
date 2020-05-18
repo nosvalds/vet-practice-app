@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Owner;
 
 class Owners extends Controller
 {
@@ -14,7 +15,8 @@ class Owners extends Controller
      */
     public function index()
     {
-        //
+        // return all Owners from the database
+        return Owner::all();
     }
 
     /**
@@ -25,7 +27,11 @@ class Owners extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // get request data
+        $data = $request->all();
+
+        // create new record in DB
+        return Owner::create($data);
     }
 
     /**
@@ -34,9 +40,10 @@ class Owners extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Owner $owner)
     {
-        //
+        //return the requested owner
+        return $owner;
     }
 
     /**
@@ -46,9 +53,16 @@ class Owners extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Owner $owner)
     {
-        //
+        // get all the request data
+        $data = $request->all();
+
+        // update owner in the database
+        $owner->update($data);
+
+        // return updated version
+        return $owner;
     }
 
     /**
@@ -57,8 +71,12 @@ class Owners extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Owner $owner)
     {
-        //
+        // delete owner from the DB
+        $owner->delete();
+
+        // return 204
+        return response(null, 204);
     }
 }
