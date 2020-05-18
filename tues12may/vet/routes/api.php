@@ -36,4 +36,8 @@ Route::group(["prefix" => "/owners"], function () {
     Route::delete('/{owner}','API\Owners@destroy');
     Route::post('/','API\Owners@store');
     Route::put('/{owner}','API\Owners@update');
+
+    // Owners/{owner_id}/animals
+    Route::get('/{owner}/animals','API\Owners\Animals@show');
+    Route::post('/{owner}/animals','API\Owners\Animals@store');
 });
