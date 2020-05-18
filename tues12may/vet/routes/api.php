@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-// Animals
+// animals
 Route::group(["prefix" => "/animals"], function () {
     Route::get('/','API\Animals@index');
     Route::get('/{animal}','API\Animals@show');
@@ -29,7 +29,7 @@ Route::group(["prefix" => "/animals"], function () {
     Route::put('/{animal}','API\Animals@update');
 });
 
-// Owners
+// owners
 Route::group(["prefix" => "/owners"], function () {
     Route::get('/','API\Owners@index');
     Route::get('/{owner}','API\Owners@show');
@@ -37,7 +37,7 @@ Route::group(["prefix" => "/owners"], function () {
     Route::post('/','API\Owners@store');
     Route::put('/{owner}','API\Owners@update');
 
-    // Owners/{owner_id}/animals
+    // owners/{owner_id}/animals
     Route::get('/{owner}/animals','API\Owners\Animals@show');
     Route::post('/{owner}/animals','API\Owners\Animals@store');
 });
