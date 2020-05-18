@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Owner;
 use App\Animal;
 use App\Http\Requests\API\AnimalRequest as Request;
+use App\Http\Resources\API\AnimalResource;
 
 class Animals extends Controller
 {
@@ -32,7 +33,7 @@ class Animals extends Controller
         $id = $owner->id; // get owner id
         $data['owner_id'] = $id; // set owner id to associate animal with the owner
         $animal = Animal::create($data); // save to DB
-        return $animal;
+        return new AnimalResource($animal);
     }
 
     /**
@@ -44,7 +45,9 @@ class Animals extends Controller
     public function show(Owner $owner)
     {
         //
-        return $owner->animals;
+        $animals = $owner->animals;
+
+        return AnimalResource::collection($animals);
     }
 
     /**
