@@ -17,7 +17,7 @@ class Animals extends Controller
 
     public function show(Animal $animal) // Route Model Binding automatically pulls Owner->find({id});
     {
-        $owner = Owner::find($animal->owner_id);
+        $owner = $animal->owner;
         return view("animals",['page' => 'Animal','animal' => $animal, 'owner' => $owner]);
     }
 }

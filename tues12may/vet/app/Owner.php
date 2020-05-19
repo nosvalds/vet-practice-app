@@ -47,7 +47,15 @@ class Owner extends Model
     // Username that created Owner
     public function createdBy()
     {
-        $user = User::find($this->user_id);
+        $user = User::find($this->user_id); // FIX ME
         return $user->name;
+    }
+
+    public function validPhoneNumber() : bool
+    {
+        $phone = $this->telephone;
+        
+        // Check + and the length of number is between 10-14 characters
+        return preg_match('/^\+\d{10,14}$/', $phone);
     }
 }
