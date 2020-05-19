@@ -15,7 +15,7 @@ class AddUserIdToOwnerTable extends Migration
     {
         Schema::table('owners', function (Blueprint $table) {
             // add user_id foreign key to owners table
-            $table->foreignId('user_id')->unsigned();
+            $table->foreignId('user_id')->unsigned()->nullable();
             $table->foreign("user_id")->references("id")->on("users");
         });
     }

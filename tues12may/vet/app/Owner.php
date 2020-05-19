@@ -58,4 +58,9 @@ class Owner extends Model
         // Check + and the length of number is between 10-14 characters
         return preg_match('/^\+\d{10,14}$/', $phone);
     }
+
+    public function numberOfPets()
+    {
+        return count($this->animals->all());
+    }
 }
