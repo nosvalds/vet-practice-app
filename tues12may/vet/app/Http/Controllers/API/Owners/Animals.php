@@ -29,11 +29,9 @@ class Animals extends Controller
      */
     public function store(Owner $owner, Request $request)
     {
-        $data = $request->all(); // turn request into array
-        $id = $owner->id; // get owner id
-        $data['owner_id'] = $id; // set owner id to associate animal with the owner
-        $animal = Animal::create($data); // save to DB
-        return new AnimalResource($animal);
+        $animal_data = $request->all(); // turn request into array 
+        $new_animal = $owner->animals()->create($animal_data);
+        return new AnimalResource($new_animal);
     }
 
     /**
