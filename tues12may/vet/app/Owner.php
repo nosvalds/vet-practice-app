@@ -43,4 +43,11 @@ class Owner extends Model
     {
         return $this->hasMany(Animal::class);
     }
+
+    // Username that created Owner
+    public function createdBy()
+    {
+        $user = User::find($this->user_id);
+        return $user->name;
+    }
 }
