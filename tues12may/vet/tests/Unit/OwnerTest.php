@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Owner;
+use App\Animal;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OwnerTest extends TestCase
@@ -63,38 +64,42 @@ class OwnerTest extends TestCase
 
     public function testDatabaseCreate()
     {
-        $owner_DB = Owner::create(
-            [
-                "first_name" => "Nik",
-                "last_name" => "Osvalds",
-                "telephone" => "+44123456789",
-                "address_1" => "123 Road St",
-                "address_2" => "Apt 1",
-                "town" => "Bristol",
-                "postcode" => "BS3 5HG",
-                "user_id" => $this->user->id,
-            ]
-            );
+        $owner_DB = factory(Owner::class)->create();
 
         $ownerFromDB = Owner::all()->first();
 
         $this->assertSame($owner_DB->first_name, $ownerFromDB->first_name);
+        $this->assertSame($owner_DB->last_name, $ownerFromDB->last_name);
     }
 
     public function testNumOfPets()
     {
-        
-        $owner = factory(\App\Owner::class)->create();
+        // create owner w/ Ownerfactory
+        $owner = factory(Owner::class)->create();
         $this->assertSame(0, $owner->numberOfPets());
         
         // Add 1 Pet
-        $animal_data = factory(\App\Animal::class)->make()->toArray();
-        $animal = $owner->animals()->create($animal_data); // potentially save is the wrong method, https://laravel.com/docs/7.x/database-testing#writing-factories
+        $animal_data = factory(Animal::class)->make()->toArray();
+        $owner->animals()->create($animal_data); // save animal to DB 
 
-        $animal_data = factory(\App\Animal::class)->make()->toArray();
-        $owner->animals()->create($animal_data);
-        dd($owner);
-        
+        // fetch updated data from DB
+        $owner = Owner::find(1);
         $this->assertSame(1, $owner->numberOfPets());
+
+        // Add another Pet
+        $animal_data = factory(Animal::class)->make()->toArray();
+        $owner->animals()->create($animal_data); // save animal to DB 
+
+        // fetch updated data from DB
+        $owner = Owner::find(1);
+        $this->assertSame(2, $owner->numberOfPets());
+
+        // Add another Pet
+        $animal_data = factory(Animal::class)->make()->toArray();
+        $owner->animals()->create($animal_data); // save animal to DB 
+
+        // fetch updated data from DB
+        $owner = Owner::find(1);
+        $this->assertSame(3, $owner->numberOfPets());
     }
 }

@@ -61,6 +61,6 @@ class Owner extends Model
 
     public function numberOfPets()
     {
-        return count($this->animals->all());
+        return $this->animals->count();
     }
 }
