@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Owner;
+use App\User;
 use App\Animal;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -99,5 +100,18 @@ class OwnerTest extends TestCase
             $animal_data = factory(Animal::class)->make()->toArray(); // create animal object with factory
             $owner->animals()->create($animal_data); // save animal to DB associated with our owner
         }
+    }
+
+    public function testOwnerFormFilledCorrect()
+    {
+        $user = factory(User::class)->create();
+
+        $owner_data = factory(Owner::class)->make(["first_name" => "Joe"])->toArray();
+
+        $this->actingAs($user)->call('POST', '/owners/create', $owner_data);
+
+        $ownerFromDB = Owner::all()->first();
+
+        $this->assertSame('Joe', $ownerFromDB->first_name);
     }
 }
