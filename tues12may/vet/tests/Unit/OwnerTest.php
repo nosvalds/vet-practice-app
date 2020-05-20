@@ -79,7 +79,7 @@ class OwnerTest extends TestCase
         $ownerFromDB = Owner::all()->first();
 
         // compare values
-        $this->assertSame("John", $ownerFromDB->first_name); // make sure we compare against a string
+        $this->assertSame("John", $ownerFromDB->first_name); // make sure we compare against a known value
         $this->assertSame("Doe", $ownerFromDB->last_name);
     }
 
@@ -92,7 +92,7 @@ class OwnerTest extends TestCase
             // get owner from DB
             $owner = Owner::find(1);
 
-            // compare 
+            // Make Assertion 
             $this->assertSame($i, $owner->numberOfPets());
 
             // Add 1 Pet
