@@ -49,60 +49,55 @@ class OwnerTest extends TestCase
         // default "telephone" => "+44123456789" is valid
         $this->assertTrue($this->owner->validPhoneNumber());
 
-        $this->owner->telephone = "+12345142"; // Invalid < 10
-        $this->assertFalse($this->owner->validPhoneNumber());
+        // $this->owner->telephone = "+12345142"; // Invalid < 10
+        // $this->assertFalse($this->owner->validPhoneNumber());
         
-        $this->owner->telephone = "+123456789123456"; // Invalid > 14
-        $this->assertFalse($this->owner->validPhoneNumber());
+        // $this->owner->telephone = "+123456789123456"; // Invalid > 14
+        // $this->assertFalse($this->owner->validPhoneNumber());
 
-        $this->owner->telephone = "+A2345678912"; // Invalid contains A letter
-        $this->assertFalse($this->owner->validPhoneNumber());
+        // $this->owner->telephone = "+A2345678912"; // Invalid contains A letter
+        // $this->assertFalse($this->owner->validPhoneNumber());
 
-        $this->owner->telephone = "12345678912"; // Invalid missing +
-        $this->assertFalse($this->owner->validPhoneNumber());
+        // $this->owner->telephone = "12345678912"; // Invalid missing +
+        // $this->assertFalse($this->owner->validPhoneNumber());
+
+        // refactoring
+        $invalidNumbers = ["+12345142", "+123456789123456", "+A2345678912","12345678912"];
+
+        foreach ($invalidNumbers as $number){
+            $this->owner->telephone = $number;
+            $this->assertFalse($this->owner->validPhoneNumber());
+        }
     }
 
     public function testDatabaseCreate()
     {
         // create owner w/ Owner Factory
-        $owner = factory(Owner::class)->create();
-
+        factory(Owner::class)->create(["first_name" => "John", "last_name" => "Doe"]); // Owner::create([])
+    
         // fetch from DB
         $ownerFromDB = Owner::all()->first();
 
         // compare values
-        $this->assertSame($owner->first_name, $ownerFromDB->first_name);
-        $this->assertSame($owner->last_name, $ownerFromDB->last_name);
+        $this->assertSame("John", $ownerFromDB->first_name); // make sure we compare against a string
+        $this->assertSame("Doe", $ownerFromDB->last_name);
     }
 
     public function testNumOfPets()
     {
-        // create owner w/ Ownerfactory
+        // create owner w/ Owner factory
         $owner = factory(Owner::class)->create();
-        $this->assertSame(0, $owner->numberOfPets());
-        
-        // Add 1 Pet
-        $animal_data = factory(Animal::class)->make()->toArray();
-        $owner->animals()->create($animal_data); // save animal to Owner in DB using relationship
+      
+        for ($i = 0; $i < 5; $i += 1) { 
+            // get owner from DB
+            $owner = Owner::find(1);
 
-        // fetch updated data from DB
-        $owner = Owner::find(1);
-        $this->assertSame(1, $owner->numberOfPets());
+            // compare 
+            $this->assertSame($i, $owner->numberOfPets());
 
-        // Add another Pet
-        $animal_data = factory(Animal::class)->make()->toArray();
-        $owner->animals()->create($animal_data); // save animal to DB 
-
-        // fetch updated data from DB
-        $owner = Owner::find(1);
-        $this->assertSame(2, $owner->numberOfPets());
-
-        // Add another Pet
-        $animal_data = factory(Animal::class)->make()->toArray();
-        $owner->animals()->create($animal_data); // save animal to DB 
-
-        // fetch updated data from DB
-        $owner = Owner::find(1);
-        $this->assertSame(3, $owner->numberOfPets());
+            // Add 1 Pet
+            $animal_data = factory(Animal::class)->make()->toArray(); // create animal object with factory
+            $owner->animals()->create($animal_data); // save animal to DB associated with our owner
+        }
     }
 }
