@@ -64,12 +64,15 @@ class OwnerTest extends TestCase
 
     public function testDatabaseCreate()
     {
-        $owner_DB = factory(Owner::class)->create();
+        // create owner w/ Owner Factory
+        $owner = factory(Owner::class)->create();
 
+        // fetch from DB
         $ownerFromDB = Owner::all()->first();
 
-        $this->assertSame($owner_DB->first_name, $ownerFromDB->first_name);
-        $this->assertSame($owner_DB->last_name, $ownerFromDB->last_name);
+        // compare values
+        $this->assertSame($owner->first_name, $ownerFromDB->first_name);
+        $this->assertSame($owner->last_name, $ownerFromDB->last_name);
     }
 
     public function testNumOfPets()
@@ -80,7 +83,7 @@ class OwnerTest extends TestCase
         
         // Add 1 Pet
         $animal_data = factory(Animal::class)->make()->toArray();
-        $owner->animals()->create($animal_data); // save animal to DB 
+        $owner->animals()->create($animal_data); // save animal to Owner in DB using relationship
 
         // fetch updated data from DB
         $owner = Owner::find(1);
