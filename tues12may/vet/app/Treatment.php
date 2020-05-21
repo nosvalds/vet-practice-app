@@ -18,9 +18,9 @@ class Treatment extends Model
         return $this->belongsToMany(Animal::class);
     }
 
-    public static function fromString(string $treatment) : Treatment
+    static public function fromString(string $string) : Treatment
     {
-        return new Treatment(["name" => $treatment]);
+        return Treatment::create(["name" => $string]);
         // It should take an array of strings and return a Collection of Treatment objects
 
         // $treatments = Treatment::fromStrings(["Fel-O-Vax Lv-K", "Pecti-Cap", "Zymox Ear Cleanser"]);
