@@ -51,11 +51,11 @@ class AnimalTest extends TestCase
         // check if we have 3 treatments now
         $this->assertSame(3, $fromDB->treatments->count());
 
-        // // set treatments
-        // $animal->setTreatments(["Fel-O-Vax Lv-K"]);
+        // set treatments to remove 2
+        $animal->setTreatments(["Fel-O-Vax Lv-K"]);
 
-        // // check treatments have been removed
-        // $fromDB = Animal::all()->first();
-        // $this->assertSame(1, $fromDB->treatments->count());
+        // check treatments have been removed
+        $fromDB = Animal::all()->first();
+        $this->assertSame(1, $fromDB->treatments->count());
     }
 }
