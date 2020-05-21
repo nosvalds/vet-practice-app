@@ -94,5 +94,11 @@ class AnimalsTest extends TestCase
         $animal = Animal::all()->first();
         $this->assertSame("Animal 2", $animal->name);
 
+        // check we've not *added* a new article
+        $animals = Animal::all();
+        $this->assertSame(1, $animal->count());
+        $this->assertSame("Animal 2", $animals->first()->name);
+        $this->assertSame(2, $animal->first()->treatments->count());
+
     }
 }
