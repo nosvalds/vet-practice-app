@@ -35,8 +35,17 @@ class Animal extends Model
         return $this->belongsToMany(Treatment::class);
     }
 
-    public function addTreatment()
+    public function setTreatments(array $strings) : Animal
     {
         # Use TDD to add a method to Animal so it's easy to treatments to an animal (Section 6.4)
+        // create collection of treatment objects and DB entries from Strings
+        $treatments = Treatment::fromStrings($strings);
+
+        // connect the Animal in question to these treatments using sync
+        $this->treatments()->sync($treatments->pluck("id"));
+
+        // for chaining
+        return $this;
+
     }
 }
