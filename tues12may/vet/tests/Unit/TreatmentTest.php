@@ -21,4 +21,16 @@ class TreatmentTest extends TestCase
         // check the tag has the right name
         $this->assertSame("Test", $result->name);
     }
+
+    public function testFromString2()
+    {
+        // call method to turn 1 string into a Treatment object
+        $result = Treatment::fromString("Neuter");
+
+        // see if we get back a Treatment
+        $this->assertInstanceOf(Treatment::class, $result);
+
+        // check the tag has the right name
+        $this->assertSame("Neuter", $result->name);
+    }
 }
