@@ -29,4 +29,14 @@ class Animal extends Model
         }
         return "Unknown birthday";
     }
+
+    public function treatments()
+    {
+        return $this->belongsToMany(Treatment::class);
+    }
+
+    public function addTreatment()
+    {
+        # Use TDD to add a method to Animal so it's easy to treatments to an animal (Section 6.4)
+    }
 }
