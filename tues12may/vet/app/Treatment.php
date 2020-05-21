@@ -20,15 +20,14 @@ class Treatment extends Model
 
     static public function fromString(string $string) : Treatment
     {
-        return Treatment::create(["name" => $string]);
-        // It should take an array of strings and return a Collection of Treatment objects
+        $string = trim($string); // remove whitespace
+        $treatment = Treatment::where("name", $string)->first();
+        return $treatment ? $treatment : Treatment::create(["name" => $string]);
+           
+    }
 
-        // $treatments = Treatment::fromStrings(["Fel-O-Vax Lv-K", "Pecti-Cap", "Zymox Ear Cleanser"]);
-        // Hint: even more treatments here
-
-        // Make sure strings are trimmed before being added to the database
-
-        // If a Treatment already exists, make sure it doesn't get added twice
-        //     
+    static public function fromStrings(array $strings) : Collection
+    {
+        return collect($strings)->map([Treatment::class, "fromString"]);
     }
 }
