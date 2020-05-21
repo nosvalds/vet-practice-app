@@ -63,13 +63,11 @@ class Animals extends Controller
         // get request data for the animal
         $animal_data = $request->only("name", "date_of_birth", "type", "weight", "height", "biteyness", "owner_id");
 
+        // save data
         $animal->fill($animal_data)->save();
-
-        // get treatments from request
-        $treatments = Treatment::fromStrings($request->get("treatments"));
-
-        // associate treatments with animal
-        $animal->treatments()->sync($treatments->pluck("id")->all());
+        
+        // update treatments
+        $animal->setTreatments($request->get("treatments"));
 
         // return updated version
         return new AnimalResource($animal);
