@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Animal;
 use App\Http\Requests\API\AnimalRequest as Request;
 use App\Http\Resources\API\AnimalResource;
+use App\Treatment;
 
 class Animals extends Controller
 {
@@ -29,11 +30,11 @@ class Animals extends Controller
      */
     public function store(Request $request)
     {
-        // get request data
-        $data = $request->all();
+        // get request data for the animal
+        $animal_data = $request->only("name", "date_of_birth", "type", "weight", "height", "biteyness", "owner_id");
+        $animal = Animal::create($animal_data)->setTreatments($request->get("treatments"));
 
-        $animal = Animal::create($data);
-        // create new record in DB
+        // return resource
         return new AnimalResource($animal);
     }
 
@@ -58,11 +59,17 @@ class Animals extends Controller
      */
     public function update(Request $request, Animal $animal)
     {
-        // get request data
-        $data = $request->all();
+        //dd($request, $animal);
+        // get request data for the animal
+        $animal_data = $request->only("name", "date_of_birth", "type", "weight", "height", "biteyness", "owner_id");
 
-        // update in the database
-        $animal->update($data);
+        $animal->fill($animal_data)->save();
+
+        // get treatments from request
+        $treatments = Treatment::fromStrings($request->get("treatments"));
+
+        // associate treatments with animal
+        $animal->treatments()->sync($treatments->pluck("id")->all());
 
         // return updated version
         return new AnimalResource($animal);

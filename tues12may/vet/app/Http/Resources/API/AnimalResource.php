@@ -15,7 +15,6 @@ class AnimalResource extends JsonResource
      */
     public function toArray($request)
     {
-       // $ownerName = Owner::find($this->owner_id)->fullName(); <- old solution
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -24,7 +23,7 @@ class AnimalResource extends JsonResource
             'height' => $this->height,
             'biteyness' => $this->biteyness,
             'owner' => $this->owner->fullName(),
-            //'treatments' => $this->treatments->pluck('name')
+            'treatments' => $this->treatments->pluck('name')
         ];
     }
 }
