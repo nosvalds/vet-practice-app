@@ -77,7 +77,7 @@ class AnimalsTest extends TestCase
         factory(Animal::class)->create(["owner_id" => 1]);
    
         // fake a GET request, need to include headers so we don't redirect to login page
-        $response = $this->withHeaders(["Accept" => "application/json"])->json('POST', '/api/animals');
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('GET', '/api/animals');
         
         // check we get back no 401 response/not authorized
         $response->assertUnauthorized();
