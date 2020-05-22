@@ -28,8 +28,8 @@ class AnimalsTest extends TestCase
     // Expected - Allowed
     public function testIndexAdmin()
     {
+        // Acting as Admin User
         $adminUser = factory(User::class)->create(['role' => 'admin']);
-        // first acting as Admin
         $this->actingAs($adminUser, 'api');
        
         // create 2 animals
@@ -50,9 +50,9 @@ class AnimalsTest extends TestCase
     // Expected - Allowed
     public function testIndexVet()
     {
-        $adminUser = factory(User::class)->create(['role' => 'vet']);
-        // first acting as Admin
-        $this->actingAs($adminUser, 'api');
+        // acting as vet
+        $vetUser = factory(User::class)->create(['role' => 'vet']);
+        $this->actingAs($vetUser, 'api');
        
         // create 2 animals
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
@@ -69,19 +69,16 @@ class AnimalsTest extends TestCase
     }
 
     // Test showing the index of Animals with No Authentication
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 401 Unauthorized
     public function testIndexNoAuth()
     {  
         // create 2 animals
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
         factory(Animal::class)->create(["owner_id" => 1]);
    
-        // fake a GET request
-        //$response = $this->call('GET', '/api/animals');
-
+        // fake a GET request, need to include headers so we don't redirect to login page
         $response = $this->withHeaders(["Accept" => "application/json"])->json('POST', '/api/animals');
         
-      
         // check we get back no 401 response/not authorized
         $response->assertUnauthorized();
     }
@@ -90,17 +87,18 @@ class AnimalsTest extends TestCase
     // Expected - Allowed
     public function testStoreAdmin()
     {
+        // acting as Admin
         $adminUser = factory(User::class)->create(['role' => 'admin']);
-
-        // first acting as Admin
         $this->actingAs($adminUser, 'api');
 
+        // make some animal data
         $animal_data = factory(Animal::class)->make([
             "name" => "Animal 1",
             "owner_id" => 1,
             "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
 
+        // fake post request with animal info
         $response = $this->call('POST', '/api/animals', $animal_data)->getOriginalContent();
         
         // check we get back an animal with 2 treatments
@@ -112,21 +110,23 @@ class AnimalsTest extends TestCase
         $this->assertSame("Animal 1", $animal->name);
 
     }
+
     // Test storing an animal with Vet user role
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 403 - not authorized
     public function testStoreVet()
     {
+        // acting as vet
         $vetUser = factory(User::class)->create(['role' => 'vet']);
-
-        // next acting as vet (should not work)
         $this->actingAs($vetUser, 'api');
 
+        // make some animal data to post
         $animal_data = factory(Animal::class)->make([
             "name" => "Animal 1",
             "owner_id" => 1,
             "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
 
+        // fake post request with animal info
         $response = $this->call('POST', '/api/animals', $animal_data);
         
         // check we get back 403 - not authorized
@@ -138,16 +138,17 @@ class AnimalsTest extends TestCase
     }
 
     // Test storing an animal with no authentication
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 401 response/not authorized
     public function testStoreNoAuth()
     {
-     
+        // make some animal data to post
         $animal_data = factory(Animal::class)->make([
             "name" => "Animal 1",
             "owner_id" => 1,
             "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
 
+        // fake post request with animal info, including Accept header to ensure we don't get a redirect to login page
         $response = $this->withHeaders(["Accept" => "application/json"])->json('POST', '/api/animals', $animal_data);
         
         // check we get back no 401 response/not authorized
@@ -195,13 +196,13 @@ class AnimalsTest extends TestCase
     }
 
     // Test Showing a single animal with No Auth
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 401 response/not authorized
     public function testShowNoAuth()
     {
         // create animal in DB
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
-        // fake a GET request w/ header
+        // fake a GET request w/ header so we don't redirect to the login page
         $response = $this->withHeaders(["Accept" => "application/json"])->json('GET', '/api/animals/1');
 
         // check we get back no 401 response/not authorized
@@ -225,8 +226,8 @@ class AnimalsTest extends TestCase
             "owner_id" => 1,
             "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
-        // update some information with a PUT
-        // fake a PUT request
+
+        // update some information with a fake PUT
         $response = $this->call('PUT', '/api/animals/1', $animal_data)->getOriginalContent();
 
         // check we get back the updated info
@@ -241,11 +242,10 @@ class AnimalsTest extends TestCase
         $this->assertSame(1, $animal->count());
         $this->assertSame("Animal 2", $animals->first()->name);
         $this->assertSame(2, $animal->first()->treatments->count());
-
     }
 
     // Test Updating animal with Vet User Role
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 403 - not authorized
     public function testUpdateVet()
     {
         // act as Admin
@@ -270,7 +270,7 @@ class AnimalsTest extends TestCase
     }
 
     // Test Updating animal with No Auth
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 401 response/not authorized
     public function testUpdateNoAuth()
     {
         // create animal in DB
@@ -282,8 +282,8 @@ class AnimalsTest extends TestCase
             "owner_id" => 1,
             "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
-        // update some information with a PUT
-        // fake a PUT request w/ headers
+
+        // update some information with a PUT w/ headers so we don't get redirected to login page
         $response = $this->withHeaders(["Accept" => "application/json"])->json('PUT', '/api/animals/1', $animal_data);
         
         // check we get back no 401 response/not authorized
@@ -312,7 +312,7 @@ class AnimalsTest extends TestCase
     }
 
     // Test deleting animal with Vet User Role
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 403 - not authorized
     public function testDestroyVet()
     {
         // act as Vet
@@ -333,14 +333,13 @@ class AnimalsTest extends TestCase
     }
 
     // Test deleting animal with no Auth
-    // Expected - Not Allowed
+    // Expected - Not Allowed - 401 response/not authorized
     public function testDestroyNoAuth()
     {
         // create an Animal
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
-        // fake a DELETE request for that Animal w/ header
-       // $response = $this->call('DELETE', '/api/animals/1');
+        // fake a DELETE request for that Animal w/ header so we aren't redirected to login page
         $response = $this->withHeaders(["Accept" => "application/json"])->json('DELETE', '/api/animals/1');
 
         // check we get back no 401 response/not authorized
