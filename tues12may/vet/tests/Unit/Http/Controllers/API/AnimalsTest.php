@@ -77,11 +77,13 @@ class AnimalsTest extends TestCase
         factory(Animal::class)->create(["owner_id" => 1]);
    
         // fake a GET request
-        $response = $this->call('GET', '/api/animals');
+        //$response = $this->call('GET', '/api/animals');
+
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('POST', '/api/animals');
+        
       
         // check we get back no 401 response/not authorized
-        // Figure out how to Add Accept application/json into header to fix this
-        $response->assertStatus(401);
+        $response->assertUnauthorized();
     }
 
     // Test storing an animal with Admin user role
@@ -146,10 +148,10 @@ class AnimalsTest extends TestCase
             "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
 
-        $response = $this->call('POST', '/api/animals', $animal_data);
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('POST', '/api/animals', $animal_data);
         
-        // check we get back 403 - not authorized
-        $response->assertStatus(302);
+        // check we get back no 401 response/not authorized
+        $response->assertUnauthorized();
 
         // check it's not been added to the database
         $animal_DB = Animal::all()->first();
@@ -199,11 +201,11 @@ class AnimalsTest extends TestCase
         // create animal in DB
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
-        // fake a GET request
-        $response = $this->call('GET', '/api/animals/1');
+        // fake a GET request w/ header
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('GET', '/api/animals/1');
 
-        // check we get back 403 - not authorized
-        $response->assertStatus(302);
+        // check we get back no 401 response/not authorized
+        $response->assertUnauthorized();
     }
 
     // Test Updating animal with Admin User Role
@@ -281,11 +283,11 @@ class AnimalsTest extends TestCase
             "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
         // update some information with a PUT
-        // fake a PUT request
-        $response = $this->call('PUT', '/api/animals/1', $animal_data);
-
-        // check we get back 403 - not authorized
-        $response->assertStatus(302);
+        // fake a PUT request w/ headers
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('PUT', '/api/animals/1', $animal_data);
+        
+        // check we get back no 401 response/not authorized
+        $response->assertUnauthorized();
     }
 
     // Test deleting animal with Admin User Role
@@ -300,7 +302,10 @@ class AnimalsTest extends TestCase
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
         // fake a DELETE request for that Animal
-        $this->call('DELETE', '/api/animals/1');
+        $response = $this->call('DELETE', '/api/animals/1');
+
+        // check we get back 204 
+        $response->assertStatus(204);
 
         // check it's been removed from the database
         $this->assertTrue(Animal::all()->isEmpty());
@@ -318,9 +323,30 @@ class AnimalsTest extends TestCase
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
         // fake a DELETE request for that Animal
-        $this->call('DELETE', '/api/animals/1');
+        $response = $this->call('DELETE', '/api/animals/1');
 
-        // check it's been removed from the database
-        $this->assertTrue(Animal::all()->isEmpty());
+        // check we get back 403 - not authorized
+        $response->assertStatus(403);
+
+        // check it has NOT been removed from the database
+        $this->assertNotTrue(Animal::all()->isEmpty());
+    }
+
+    // Test deleting animal with no Auth
+    // Expected - Not Allowed
+    public function testDestroyNoAuth()
+    {
+        // create an Animal
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+
+        // fake a DELETE request for that Animal w/ header
+       // $response = $this->call('DELETE', '/api/animals/1');
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('DELETE', '/api/animals/1');
+
+        // check we get back no 401 response/not authorized
+        $response->assertUnauthorized();
+
+        // check it has NOT been removed from the database
+        $this->assertNotTrue(Animal::all()->isEmpty());
     }
 }

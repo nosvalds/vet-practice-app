@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 // use Illuminate\Http\Request;
 use App\Animal;
+use App\Http\Requests\AnimalDestroyRequest;
 use App\Http\Requests\AnimalStoreRequest;
 use App\Http\Requests\API\AnimalRequest as Request;
 use App\Http\Resources\API\AnimalResource;
@@ -80,7 +81,7 @@ class Animals extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Animal $animal)
+    public function destroy(AnimalDestroyRequest $request, Animal $animal)
     {
         // delete animal from the DB
         $animal->delete();
