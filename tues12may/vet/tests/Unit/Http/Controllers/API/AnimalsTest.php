@@ -24,9 +24,14 @@ class AnimalsTest extends TestCase
         
     }
 
-    public function testIndex()
+    // Test showing the index of Animals with the admin role user
+    // Expected - Allowed
+    public function testIndexAdmin()
     {
-
+        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        // first acting as Admin
+        $this->actingAs($adminUser, 'api');
+       
         // create 2 animals
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
         factory(Animal::class)->create(["owner_id" => 1]);
@@ -41,21 +46,61 @@ class AnimalsTest extends TestCase
         $this->assertSame("Animal 1", $response->get(0)->name);
     }
 
-    public function testStore()
+    // Test showing the index of Animals with the vet role user
+    // Expected - Allowed
+    public function testIndexVet()
     {
+        $adminUser = factory(User::class)->create(['role' => 'vet']);
+        // first acting as Admin
+        $this->actingAs($adminUser, 'api');
+       
+        // create 2 animals
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+        factory(Animal::class)->create(["owner_id" => 1]);
+   
+        // fake a GET request
+        $response = $this->call('GET', '/api/animals')->getOriginalContent();
+
+        // check we get back two Animals
+        $this->assertSame(2, $response->count());
+
+        // check we get back the first Animal first
+        $this->assertSame("Animal 1", $response->get(0)->name);
+    }
+
+    // Test showing the index of Animals with No Authentication
+    // Expected - Not Allowed
+    public function testIndexNoAuth()
+    {  
+        // create 2 animals
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+        factory(Animal::class)->create(["owner_id" => 1]);
+   
+        // fake a GET request
+        $response = $this->call('GET', '/api/animals');
+      
+        // check we get back no 401 response/not authorized
+        // Figure out how to Add Accept application/json into header to fix this
+        $response->assertStatus(401);
+    }
+
+    // Test storing an animal with Admin user role
+    // Expected - Allowed
+    public function testStoreAdmin()
+    {
+        $adminUser = factory(User::class)->create(['role' => 'admin']);
+
+        // first acting as Admin
+        $this->actingAs($adminUser, 'api');
+
         $animal_data = factory(Animal::class)->make([
             "name" => "Animal 1",
             "owner_id" => 1,
-            "treatments" => ["Neutering", "Spaying"],
+            "treatments" => ["Neutering 2", "Spaying 2"],
             ])->toArray();
 
-        //See Below
-        $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiMDZlYzE5MjJhZWM2NmIxYTgzYTRkMzRlYTdhNWQ3NTViYWZiZDA4NjZlZWI4OGI3YmVhMGEyMWI5NjkzOWNkYzY0MzQ2Yzg5OWI2NDIwMzkiLCJpYXQiOjE1OTAxMzQ1NDgsIm5iZiI6MTU5MDEzNDU0OCwiZXhwIjoxNjIxNjcwNTQ3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.g6Jwd_4J5PAe8p3adrvTGquPbRw6LMWfx0B3cTRD-JAXA2vjvOmsSqjLQZnPQDGV5oIaIdPq8s9VG-Rxe0_QcL9PraoVqyHzHE952Ft4RiSj0yJxZmVuynLehoJzffDWsT1QT1sDbvsJVJo07XhyKaVrUpvVtcmS9ra64U8r48SXKzu2t0sUrYtBD_ynOwmr3C90j-crCj_Zusvhp2qm3CjBXG2_4CQ5IQskf30hj03gzdkdPMe8JBVwe7PXqNKo9qc2Bp9qX0wvhlYjU8aJKJselB3NQz7N3_6TLesmJcI_17R7_5fFaMSGOLb60oH8Pd4UAVUEYYpGfLF_0dty-Q2VGJadYjeTFrLy9CsNj7OLtnJcoioM04XkbRSLxNPgx4CoA2vIRTEYxw2cqSb-dCXMDsURwjylRg3By96cLhyWn-sO9F7OV8VF4kt-IEIKezHUqlydphTsmFb67UCtgz4h-J1N-mjELHser6IM1AfUDJ9M7-UeDkDH3S4ARFqlosZd8XwB8RKNymUAZu4OJLdN6ax48rMbiGvTzpQRPlPvQFw1I-y3VlHKyKRqfasQNplV08RyBKrwwXPVwGzVdfnXbcxRAn9fMI_vq4sBr-c1AvA0qAuDG_EjXitzQWky68vP-l7Gq_oANWh-W0ulBwvTtrXCNl5KoaYlOQTOScI";
-
-        $headers = [ 'Authorization' => "Bearer $token"];
-        //dd($headers);
-        $response = $this->call('POST', '/api/animals', $animal_data, $headers)->getOriginalContent();
-        dd($response);
+        $response = $this->call('POST', '/api/animals', $animal_data)->getOriginalContent();
+        
         // check we get back an animal with 2 treatments
         $this->assertSame("Animal 1",$response->name);
         $this->assertSame(2,$response->treatments->count());
@@ -63,10 +108,62 @@ class AnimalsTest extends TestCase
         // check it's been added to the database
         $animal = Animal::all()->first();
         $this->assertSame("Animal 1", $animal->name);
+
+    }
+    // Test storing an animal with Vet user role
+    // Expected - Not Allowed
+    public function testStoreVet()
+    {
+        $vetUser = factory(User::class)->create(['role' => 'vet']);
+
+        // next acting as vet (should not work)
+        $this->actingAs($vetUser, 'api');
+
+        $animal_data = factory(Animal::class)->make([
+            "name" => "Animal 1",
+            "owner_id" => 1,
+            "treatments" => ["Neutering 2", "Spaying 2"],
+            ])->toArray();
+
+        $response = $this->call('POST', '/api/animals', $animal_data);
+        
+        // check we get back 403 - not authorized
+        $response->assertStatus(403);
+
+        // check it's not been added to the database
+        $animal_DB = Animal::all()->first();
+        $this->assertSame(null, $animal_DB);
     }
 
-    public function testShow()
+    // Test storing an animal with no authentication
+    // Expected - Not Allowed
+    public function testStoreNoAuth()
     {
+     
+        $animal_data = factory(Animal::class)->make([
+            "name" => "Animal 1",
+            "owner_id" => 1,
+            "treatments" => ["Neutering 2", "Spaying 2"],
+            ])->toArray();
+
+        $response = $this->call('POST', '/api/animals', $animal_data);
+        
+        // check we get back 403 - not authorized
+        $response->assertStatus(302);
+
+        // check it's not been added to the database
+        $animal_DB = Animal::all()->first();
+        $this->assertSame(null, $animal_DB);
+    }
+
+    // Test Showing a single animal with Admin User Role
+    // Expected - Allowed
+    public function testShowAdmin()
+    {
+        // act as Admin
+        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        $this->actingAs($adminUser, 'api');
+
         // create animal in DB
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
@@ -77,8 +174,46 @@ class AnimalsTest extends TestCase
         $this->assertSame("Animal 1", $response->name);
     }
 
-    public function testUpdate()
+    // Test Showing a single animal with Vet User Role
+    // Expected - Allowed
+    public function testShowVet()
     {
+        // acting as vet
+        $vetUser = factory(User::class)->create(['role' => 'vet']);
+        $this->actingAs($vetUser, 'api');
+
+        // create animal in DB
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+
+        // fake a GET request
+        $response = $this->call('GET', '/api/animals/1')->getOriginalContent();
+
+        // check we get back the Animal we created 
+        $this->assertSame("Animal 1", $response->name);
+    }
+
+    // Test Showing a single animal with No Auth
+    // Expected - Not Allowed
+    public function testShowNoAuth()
+    {
+        // create animal in DB
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+
+        // fake a GET request
+        $response = $this->call('GET', '/api/animals/1');
+
+        // check we get back 403 - not authorized
+        $response->assertStatus(302);
+    }
+
+    // Test Updating animal with Admin User Role
+    // Expected - Allowed
+    public function testUpdateAdmin()
+    {
+        // act as Admin
+        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        $this->actingAs($adminUser, 'api');
+        
         // create animal in DB
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
@@ -107,13 +242,83 @@ class AnimalsTest extends TestCase
 
     }
 
-    public function testDestroy()
+    // Test Updating animal with Vet User Role
+    // Expected - Not Allowed
+    public function testUpdateVet()
     {
+        // act as Admin
+        $vetUser = factory(User::class)->create(['role' => 'vet']);
+        $this->actingAs($vetUser, 'api');
+
+        // create animal in DB
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+
+        // create some new animal data
+        $animal_data = factory(Animal::class)->make([
+            "name" => "Animal 2",
+            "owner_id" => 1,
+            "treatments" => ["Neutering 2", "Spaying 2"],
+            ])->toArray();
+        // update some information with a PUT
+        // fake a PUT request
+        $response = $this->call('PUT', '/api/animals/1', $animal_data);
+
+        // check we get back 403 - not authorized
+        $response->assertStatus(403);
+    }
+
+    // Test Updating animal with No Auth
+    // Expected - Not Allowed
+    public function testUpdateNoAuth()
+    {
+        // create animal in DB
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+
+        // create some new animal data
+        $animal_data = factory(Animal::class)->make([
+            "name" => "Animal 2",
+            "owner_id" => 1,
+            "treatments" => ["Neutering 2", "Spaying 2"],
+            ])->toArray();
+        // update some information with a PUT
+        // fake a PUT request
+        $response = $this->call('PUT', '/api/animals/1', $animal_data);
+
+        // check we get back 403 - not authorized
+        $response->assertStatus(302);
+    }
+
+    // Test deleting animal with Admin User Role
+    // Expected - Allowed
+    public function testDestroyAdmin()
+    {
+        // act as Admin
+        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        $this->actingAs($adminUser, 'api');
+
         // create an Animal
         factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
 
         // fake a DELETE request for that Animal
-        $response = $this->call('DELETE', '/api/animals/1');
+        $this->call('DELETE', '/api/animals/1');
+
+        // check it's been removed from the database
+        $this->assertTrue(Animal::all()->isEmpty());
+    }
+
+    // Test deleting animal with Vet User Role
+    // Expected - Not Allowed
+    public function testDestroyVet()
+    {
+        // act as Vet
+        $vetUser = factory(User::class)->create(['role' => 'vet']);
+        $this->actingAs($vetUser, 'api');
+
+        // create an Animal
+        factory(Animal::class)->create(["name" => "Animal 1", "owner_id" => 1]);
+
+        // fake a DELETE request for that Animal
+        $this->call('DELETE', '/api/animals/1');
 
         // check it's been removed from the database
         $this->assertTrue(Animal::all()->isEmpty());

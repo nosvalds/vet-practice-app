@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 // use Illuminate\Http\Request;
 use App\Animal;
+use App\Http\Requests\AnimalStoreRequest;
 use App\Http\Requests\API\AnimalRequest as Request;
 use App\Http\Resources\API\AnimalResource;
 use App\Treatment;
@@ -28,7 +29,7 @@ class Animals extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AnimalStoreRequest $request)
     {
         // get request data for the animal
         $animal_data = $request->only("name", "date_of_birth", "type", "weight", "height", "biteyness", "owner_id");
@@ -57,7 +58,7 @@ class Animals extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Animal $animal)
+    public function update(AnimalStoreRequest $request, Animal $animal)
     {
         //dd($request, $animal);
         // get request data for the animal

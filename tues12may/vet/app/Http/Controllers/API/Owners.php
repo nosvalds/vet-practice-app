@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 //use Illuminate\Http\Request;
 use App\Owner;
 use App\Http\Requests\API\OwnerRequest as Request;
+use App\Http\Requests\OwnerDestroyRequest;
+use App\Http\Requests\OwnerStoreRequest;
 use App\Http\Resources\API\OwnerResource;
 
 class Owners extends Controller
@@ -27,7 +29,7 @@ class Owners extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OwnerStoreRequest $request)
     {
         // get request data
         $data = $request->all();
@@ -57,7 +59,7 @@ class Owners extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Owner $owner)
+    public function update(OwnerStoreRequest $request, Owner $owner)
     {
         // get all the request data
         $data = $request->all();
@@ -75,7 +77,7 @@ class Owners extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Owner $owner)
+    public function destroy(OwnerDestroyRequest $owner)
     {
         // delete owner from the DB
         $owner->delete();
