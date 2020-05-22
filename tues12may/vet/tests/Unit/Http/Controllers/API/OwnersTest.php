@@ -29,7 +29,7 @@ class OwnersTest extends TestCase
         $this->owner_DB2 = factory(Owner::class)->create(["first_name" => "Test Owner DB 2", "user_id" => 1]);
     }
 
-    // Test showing the index of Animals with No Authentication
+    // Test showing the index of owners with No Authentication
     // Expected - Not Allowed - 401 Unauthorized
     public function testAllNoAuth()
     {
@@ -49,27 +49,27 @@ class OwnersTest extends TestCase
 
         // POST
         // update some information with a PUT w/ headers so we don't get redirected to login page
-        $response = $this->withHeaders(["Accept" => "application/json"])->json('POST', '/api/animals/', $this->owner_data);
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('POST', '/api/owners/', $this->owner_data);
         
         // check we get back no 401 response/not authorized
         $response->assertUnauthorized();
 
         // PUT
         // update some information with a PUT w/ headers so we don't get redirected to login page
-        $response = $this->withHeaders(["Accept" => "application/json"])->json('PUT', '/api/animals/1', $this->owner_data_update);
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('PUT', '/api/owners/1', $this->owner_data_update);
         
         // check we get back no 401 response/not authorized
         $response->assertUnauthorized();
 
         // DELETE
         // update some information with a PUT w/ headers so we don't get redirected to login page
-        $response = $this->withHeaders(["Accept" => "application/json"])->json('DELETE', '/api/animals/1');
+        $response = $this->withHeaders(["Accept" => "application/json"])->json('DELETE', '/api/owners/1');
         
         // check we get back no 401 response/not authorized
         $response->assertUnauthorized();
     }
 
-    // Test showing the index of Animals with Vet User Role
+    // Test showing the index of Owners with Vet User Role
     // Expected - Allowed
     public function testIndexVet()
     {
@@ -86,7 +86,7 @@ class OwnersTest extends TestCase
         $this->assertSame("Test Owner DB 1", $response->get(0)->first_name);
     }
 
-    // Test showing the index of Animals with Admin User Role
+    // Test showing the index of owners with Admin User Role
     // Expected - Allowed
     public function testIndexAdmin()
     {
@@ -103,4 +103,38 @@ class OwnersTest extends TestCase
         $this->assertSame("Test Owner DB 1", $response->get(0)->first_name);
     }
 
+    // Test storing an owner with Vet user role
+    // Expected - Not Allowed - 403 - not authorized
+    public function testStoreVet()
+    {
+        // acting as vet
+        $this->actingAs($this->vetUser, 'api');
+
+        // fake post request with owner info
+        $response = $this->call('POST', '/api/owners', $this->owner_data);
+        
+        // check we get back 403 - not authorized
+        $response->assertStatus(403);
+
+        // check it's not been added to the database (still 2 owners only from setup)
+        $this->assertSame(2, Owner::all()->count());
+    }
+
+    // Test storing an owner with Admin user role
+    // Expected - Allowed
+    public function testStoreAdmin()
+    {
+        // acting as Admin
+        $this->actingAs($this->adminUser, 'api');
+
+        // fake post request with animal info
+        $response = $this->call('POST', '/api/owners', $this->owner_data)->getOriginalContent();
+        
+        // check we get back an owner with the right name from setup
+        $this->assertSame("Test Owner Data",$response->first_name);
+
+        // check it's been added to the database
+        $owner = Owner::find(3);
+        $this->assertSame("Test Owner Data", $owner->first_name);
+    }
 }
