@@ -49,8 +49,13 @@ class AnimalsTest extends TestCase
             "treatments" => ["Neutering", "Spaying"],
             ])->toArray();
 
-        $response = $this->call('POST', '/api/animals', $animal_data)->getOriginalContent();
-        
+        //See Below
+        $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiMDZlYzE5MjJhZWM2NmIxYTgzYTRkMzRlYTdhNWQ3NTViYWZiZDA4NjZlZWI4OGI3YmVhMGEyMWI5NjkzOWNkYzY0MzQ2Yzg5OWI2NDIwMzkiLCJpYXQiOjE1OTAxMzQ1NDgsIm5iZiI6MTU5MDEzNDU0OCwiZXhwIjoxNjIxNjcwNTQ3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.g6Jwd_4J5PAe8p3adrvTGquPbRw6LMWfx0B3cTRD-JAXA2vjvOmsSqjLQZnPQDGV5oIaIdPq8s9VG-Rxe0_QcL9PraoVqyHzHE952Ft4RiSj0yJxZmVuynLehoJzffDWsT1QT1sDbvsJVJo07XhyKaVrUpvVtcmS9ra64U8r48SXKzu2t0sUrYtBD_ynOwmr3C90j-crCj_Zusvhp2qm3CjBXG2_4CQ5IQskf30hj03gzdkdPMe8JBVwe7PXqNKo9qc2Bp9qX0wvhlYjU8aJKJselB3NQz7N3_6TLesmJcI_17R7_5fFaMSGOLb60oH8Pd4UAVUEYYpGfLF_0dty-Q2VGJadYjeTFrLy9CsNj7OLtnJcoioM04XkbRSLxNPgx4CoA2vIRTEYxw2cqSb-dCXMDsURwjylRg3By96cLhyWn-sO9F7OV8VF4kt-IEIKezHUqlydphTsmFb67UCtgz4h-J1N-mjELHser6IM1AfUDJ9M7-UeDkDH3S4ARFqlosZd8XwB8RKNymUAZu4OJLdN6ax48rMbiGvTzpQRPlPvQFw1I-y3VlHKyKRqfasQNplV08RyBKrwwXPVwGzVdfnXbcxRAn9fMI_vq4sBr-c1AvA0qAuDG_EjXitzQWky68vP-l7Gq_oANWh-W0ulBwvTtrXCNl5KoaYlOQTOScI";
+
+        $headers = [ 'Authorization' => "Bearer $token"];
+        //dd($headers);
+        $response = $this->call('POST', '/api/animals', $animal_data, $headers)->getOriginalContent();
+        dd($response);
         // check we get back an animal with 2 treatments
         $this->assertSame("Animal 1",$response->name);
         $this->assertSame(2,$response->treatments->count());
