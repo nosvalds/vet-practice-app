@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 
 class Home extends Controller

@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Animal;
-use App\Owner;
-//use App\Http\Requests\AnimalRequest;
 
 class Animals extends Controller
 {
@@ -15,9 +12,9 @@ class Animals extends Controller
         return view("animals",['page' => 'Animals','animals' => $animals]);
     }
 
-    public function show(Animal $animal) // Route Model Binding automatically pulls Owner->find({id});
+    public function show(Animal $animal) // Route Model Binding automatically pulls Animal->find({id});
     {
-        $owner = $animal->owner;
+        $owner = $animal->owner; // get the animal's owner so we can send that to the view for display
         return view("animals",['page' => 'Animal','animal' => $animal, 'owner' => $owner]);
     }
 }

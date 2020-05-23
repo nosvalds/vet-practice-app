@@ -77,7 +77,7 @@ class Owners extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OwnerDestroyRequest $request,Owner $owner)
+    public function destroy(OwnerDestroyRequest $request, Owner $owner)
     {
         // delete owner from the DB
         $owner->delete();

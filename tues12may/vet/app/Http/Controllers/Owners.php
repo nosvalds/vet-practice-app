@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Owner;
 use App\Http\Requests\OwnerRequest;
-use App\Animal;
 use App\Http\Requests\AnimalRequest;
 
 class Owners extends Controller
@@ -85,7 +84,8 @@ class Owners extends Controller
     }
 
     public function editOwner(Owner $owner, OwnerRequest $request)
-    { // edit owner info from form into the DB
+    { 
+        // edit owner info from form into the DB
         $data = $request->all(); 
         $owner->update($data);
         
@@ -95,10 +95,8 @@ class Owners extends Controller
     public function addAnimal(Owner $owner, AnimalRequest $request)
     {
         $animal_data = $request->all(); // turn request into array
-        //$id = $owner->id; // get owner id
-        //$data['owner_id'] = $id; // set owner id to associate animal with the owner
         $owner->animals()->create($animal_data);
-        //$animal = Animal::create($data); // save to DB
-        return redirect("/owners/{$id}"); // redirect to owners page
+
+        return redirect("/owners/{$owner->id}"); // redirect to owners page
     }
 }

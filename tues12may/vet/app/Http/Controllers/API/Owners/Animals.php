@@ -49,7 +49,6 @@ class Animals extends Controller
      */
     public function show(Owner $owner)
     {
-        //
         $animals = $owner->animals;
 
         return AnimalResource::collection($animals);
