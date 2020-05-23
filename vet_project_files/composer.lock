@@ -1358,16 +1358,16 @@
         },
         {
             "name": "laravel/homestead",
-            "version": "v10.8.0",
+            "version": "v10.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/homestead.git",
-                "reference": "4e4b5b92d8192ccdbdeac826be88a9bfdfde99d0"
+                "reference": "489c6942cb9fa7f57231e89c0b01cdedde6f4b47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/homestead/zipball/4e4b5b92d8192ccdbdeac826be88a9bfdfde99d0",
-                "reference": "4e4b5b92d8192ccdbdeac826be88a9bfdfde99d0",
+                "url": "https://api.github.com/repos/laravel/homestead/zipball/489c6942cb9fa7f57231e89c0b01cdedde6f4b47",
+                "reference": "489c6942cb9fa7f57231e89c0b01cdedde6f4b47",
                 "shasum": ""
             },
             "require": {
@@ -1399,7 +1399,7 @@
                 }
             ],
             "description": "A virtual machine for web artisans.",
-            "time": "2020-04-26T23:51:08+00:00"
+            "time": "2020-05-23T12:51:56+00:00"
         },
         {
             "name": "laravel/passport",
