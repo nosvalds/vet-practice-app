@@ -13,15 +13,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // DB::table('users')->insert(factory(App\User::class)->make(
-        //     ["name" => "Nik Osvalds",
-        //      "email" => "nosvalds@gmail.com",
-        //      "password" => "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
-        //      "role" => "admin",
-        //     ]
-        // )->toArray()); // create admin user
-        DB::table('users')->insert(factory(App\User::class,8)->make()->toArray());
-        DB::table('owners')->insert(factory(App\Owner::class,100)->make()->toArray());
-        DB::table('animals')->insert(factory(App\Animal::class,250)->make()->toArray());
+        // Had to remove password from -> protected $hidden = [ ]; array in App\User.php to allow saving passwords from the factory
+        factory(App\User::class)->create(
+            ["name" => "Nik Osvalds",
+             "email" => "nosvalds@gmail.com",
+             "password" => "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
+             "role" => "admin",
+            ]
+        ); // create admin user
+
+        // create vet users
+        factory(App\User::class,2)->create();
+        
+        // create owners
+        factory(App\Owner::class,50)->create();
+
+        // create animals with treatments
+        factory(App\Animal::class, 100)->create()->each(function ($animal) {
+            $animal->treatments()->save(factory(App\Treatment::class)->make());
+            $animal->treatments()->save(factory(App\Treatment::class)->make());
+            $animal->treatments()->save(factory(App\Treatment::class)->make());
+        });
+        
     }
 }

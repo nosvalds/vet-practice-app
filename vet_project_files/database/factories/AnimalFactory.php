@@ -26,7 +26,7 @@ $factory->define(Animal::class, function (Faker $faker) {
         'weight' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 200),
         'height' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 500),
         'biteyness' => $faker->numberBetween($min = 1, $max = 5),
-        'owner_id' => $faker->numberBetween($min = 1, $max = 99),
+        'owner_id' => $faker->numberBetween($min = 1, $max = 49),
         //'created_at' =>  $faker->iso8601($max = 'now')
         //'updated_at' => $dt->toDateTimeString()
     ];
