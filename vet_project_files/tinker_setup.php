@@ -70,7 +70,7 @@ $results = Owner::where('telephone', 'like', '559%')->get();
 $user = new User();
 $user->name = "Nik Osvalds";
 $user->email = "nosvalds@gmail.com";
-$user->password = Hash::make("hello");
+$user->password = Hash::make("password");
 $user->save();
 
 $user = new User();
