@@ -34,7 +34,13 @@ class Animals extends Controller
     {
         // get request data for the animal
         $animal_data = $request->only("name", "date_of_birth", "type", "weight", "height", "biteyness", "owner_id");
-        $animal = Animal::create($animal_data)->setTreatments($request->get("treatments"));
+        $animal = Animal::create($animal_data);
+
+        // if treatment data is present then associate with animal, if not don't try
+        $treatment_data = $request->get("treatments");
+        if ($treatment_data !== null) {
+            $animal->setTreatments($treatment_data);
+        }
 
         // return resource
         return new AnimalResource($animal);

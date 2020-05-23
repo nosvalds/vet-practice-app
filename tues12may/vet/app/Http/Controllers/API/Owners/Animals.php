@@ -35,7 +35,13 @@ class Animals extends Controller
 
         // create the new animal associated with the owner
         // get treatments from the request and store them in the DB as well associated with the animal.
-        $new_animal = $owner->animals()->create($animal_data)->setTreatments($request->get("treatments"));
+        $new_animal = $owner->animals()->create($animal_data);
+
+        // if treatment data is present then associate with animal, if not, don't try
+        $treatment_data = $request->get("treatments");
+        if ($treatment_data !== null) {
+            $new_animal->setTreatments($treatment_data);
+        }
         
         // return resource
         return new AnimalResource($new_animal);

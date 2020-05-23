@@ -46,6 +46,11 @@ class AnimalsTest extends TestCase
         
         // add some treatments into post request data
         $this->animal_data["treatments"] = ["Test Treatment Data 1", "Test Treatment Data 2"];
+
+        // animal data ready for a POST request - No Treatment Data
+        $this->animal_data_2 = factory(Animal::class)->make(
+            ["name" => "Test Animal Data 2"
+            ])->toArray();
     }
 
     // Test all routes with No Authentication
@@ -134,5 +139,20 @@ class AnimalsTest extends TestCase
 
         // check treatments were save appropriately
         $this->assertSame("Test Treatment Data 1", $animal_DB->last()->treatments->get(0)->name);
+
+        // fake post request with animal info - animal with no treatments
+        $response = $this->call('POST', '/api/owners/1/animals', $this->animal_data_2);
+
+        $response->assertStatus(201);
+        
+        // check we have 4 animals in the DB now
+        $animal_DB = Animal::all();
+
+        $this->assertSame(4, $animal_DB->count());
+
+        // check name matches
+        $this->assertSame("Test Animal Data 2", $animal_DB->last()->name);
+
+
     }
 }
