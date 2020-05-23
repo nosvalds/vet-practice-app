@@ -30,7 +30,7 @@ class AnimalStoreRequest extends FormRequest
             "biteyness" => ["required", "int"],
             "weight" => ["required"],
             "height" => ["required"],
-            "treatments" => ["required", "array"],
+            "treatments" => ["array"],
             "treatments.*" => ["string", "max:100"]
         ];
     }

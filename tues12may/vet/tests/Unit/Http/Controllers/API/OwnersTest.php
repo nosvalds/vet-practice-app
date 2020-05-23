@@ -29,7 +29,7 @@ class OwnersTest extends TestCase
         $this->owner_DB2 = factory(Owner::class)->create(["first_name" => "Test Owner DB 2", "user_id" => 1]);
     }
 
-    // Test showing the index of owners with No Authentication
+    // Test all routes with No Authentication
     // Expected - Not Allowed - 401 Unauthorized
     public function testAllNoAuth()
     {

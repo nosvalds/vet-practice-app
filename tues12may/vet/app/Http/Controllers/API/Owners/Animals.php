@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 // use Illuminate\Http\Request;
 use App\Owner;
 use App\Animal;
+use App\Http\Requests\AnimalStoreRequest;
 use App\Http\Requests\API\AnimalRequest as Request;
 use App\Http\Resources\API\AnimalResource;
 
@@ -27,10 +28,16 @@ class Animals extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Owner $owner, Request $request)
+    public function store(Owner $owner, AnimalStoreRequest $request)
     {
-        $animal_data = $request->all(); // turn request into array 
-        $new_animal = $owner->animals()->create($animal_data);
+        // turn request into array, get only animal data fields
+        $animal_data = $request->only("name", "date_of_birth", "type", "weight", "height", "biteyness", "owner_id"); 
+
+        // create the new animal associated with the owner
+        // get treatments from the request and store them in the DB as well associated with the animal.
+        $new_animal = $owner->animals()->create($animal_data)->setTreatments($request->get("treatments"));
+        
+        // return resource
         return new AnimalResource($new_animal);
     }
 
