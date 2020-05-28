@@ -8,7 +8,7 @@
     @if ($page === 'Home')
         <h2 class="text-center text-primary pb-4">Good {{ $timeOfDay }} {{$user->name}}!</h2>
         <div class="container">
-            <img class="rounded mx-auto d-block img-fluid" src="http://placekitten.com/1000/800" alt="placeholder kitten">
+            <img class="rounded mx-auto d-block img-fluid" src="https://www.tokkoro.com/picsup/2839685-namibia-africa-nature-landscape-trees-savannah-shrubs-sunset___landscape-nature-wallpapers.jpg" alt="placeholder kitten">
         </div>
     @elseif ($page === 'Owner')
         <div class="container mb-2">
