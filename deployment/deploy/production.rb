@@ -7,4 +7,4 @@ set :branch, "master"
 
 # it should deploy to the following directory
 # update with the appropriate directory on your server
-set :deploy_to, "/var/www/vet-practice-app"
+set :deploy_to, "/var/www/vet-practice-app/"
