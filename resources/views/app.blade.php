@@ -14,7 +14,7 @@
     <div class="container">
         @include('_parts/header_nav')
         <div class="jumbotron">
-          <h1 class="display-3 text-center">Wildlife Supreme Vet Service PRD</h1>
+          <h1 class="display-3 text-center">Wildlife Supreme Vet Service</h1>
         </div>
         <main>
             @yield('content')
