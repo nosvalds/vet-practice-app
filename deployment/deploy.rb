@@ -7,7 +7,7 @@ set :application, "vet-practice-app"
 
 # the GitHub URL to clone
 # make sure you update with your details
-set :repo_url, "git@github.com:nosvalds/vet-practice-app"
+set :repo_url, "git@github.com:nosvalds/vet-practice-app.git"
 
 
 ##
