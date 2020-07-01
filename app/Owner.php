@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
 
 class Owner extends Model
 {
@@ -47,7 +49,7 @@ class Owner extends Model
     // Username that created Owner
     public function createdBy()
     {
-        $user = User::find($this->user_id); // FIX ME
+        $user = Auth::User(); // FIX ME
         return $user->name;
     }
 

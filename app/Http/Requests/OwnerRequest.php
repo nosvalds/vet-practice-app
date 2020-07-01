@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class OwnerRequest extends FormRequest
 {
     /**
@@ -13,7 +14,7 @@ class OwnerRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()['role'] === 'admin'; // only admin roles can add Owners
     }
 
     /**
@@ -31,7 +32,6 @@ class OwnerRequest extends FormRequest
             "address_2" => ["required", "string","max:100"],
             "town" => ["required", "string","max:100"],
             "postcode" => ["required", "string","max:10"],
-            "user_id" => ["required"]
         ];
     }
 }

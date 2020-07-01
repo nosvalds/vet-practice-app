@@ -13,7 +13,7 @@ class AnimalRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()['role'] === 'admin';
     }
 
     /**
@@ -30,7 +30,6 @@ class AnimalRequest extends FormRequest
             "biteyness" => ["required", "int"],
             "weight" => ["required"],
             "height" => ["required"],
-            //"owner_id" => ["required"] not required as POST/form field, we set this ourselves from URL
         ];
     }
 }
