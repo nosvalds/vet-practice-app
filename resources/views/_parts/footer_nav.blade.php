@@ -17,5 +17,6 @@
                 </li>
             </ul>
         </div>
+        <a class="navbar-brand" href="https://github.com/nosvalds/vet-practice-app"><i class="fab fa-github"></i>GitHub</a>
     </nav>
 </footer>
