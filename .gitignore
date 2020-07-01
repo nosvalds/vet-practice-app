@@ -12,3 +12,5 @@ npm-debug.log
 yarn-error.log
 Auth.md
 /log/capistrano.log
+/.vagrant
+.vagrant
