@@ -313,6 +313,13 @@ Add a new animal to an owner
 }
 ```
 
+# Deployment
+- Hosted on free AWS EC2 instance
+```bash
+bundle exec cap production deploy
+```
+
+# Laravel Documentation
 
 <p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
 
