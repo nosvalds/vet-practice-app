@@ -104,14 +104,19 @@ class OwnerTest extends TestCase
 
     public function testOwnerFormFilledCorrect()
     {
-        $user = factory(User::class)->create();
+        // create user with admin role so auth allows POST to database
+        $user = factory(User::class)->create(['role' => 'admin']);
 
+        // create an owner object using the factory, set name Joe
         $owner_data = factory(Owner::class)->make(["first_name" => "Joe"])->toArray();
 
+        // use acting as to POST the data as the user
         $this->actingAs($user)->call('POST', '/owners/create', $owner_data);
 
+        // grab that owner from DB
         $ownerFromDB = Owner::all()->first();
 
+        // check if it's Joe
         $this->assertSame('Joe', $ownerFromDB->first_name);
     }
 }
