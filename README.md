@@ -1,3 +1,6 @@
+# NOTE
+I've stopped hosting this project on AWS, so some of the below will be out of date. This was done to reduce my footprint on the web.
+
 # Wildlife Sumpreme Veterinary Practice
 
 This mock veterinary practice database web application and API was developed over 2 weeks of the developme bootcamp learning and applying the skills listed in the gitHub topics. It uses Laravel Blade to display lists of owners and their animals from the MySQL database. It contains forms that allow for adding/updating these based on your user role. We also developed an API (using a test driven development approach) with Laravel that can be used to query and update the database (based on OAUTH and user role). Finally we deployed the site on AWS and set up Capistrano to enable Continuous Deployment of updates to the site.
@@ -8,6 +11,66 @@ https://wildlifesupreme.developme.space
 # API
 https://wildlifesupreme.developme.space/api/
 
+# Local Set Up
+1. Clone the git repository to your local machine by running the following command in your terminal.
+  - Use the ```main``` branch in git to run this project locally.
+
+```bash
+git clone {url}
+```
+
+2. In your terminal cd into the project directory and run the below composer command to install neccessary dependencies
+```bash
+cd {project-directory}
+composer install
+```
+
+3. Set up homestead virtual machine.
+- Run the below command in the project directory
+```bash
+vendor/bin/homestead make
+```
+- This will create a Homestead.yaml file inside your project directory
+  - Inside this file edit the memory to be 512 
+    - ```memory: 512``` 
+
+4. Create the .env file
+- Run the below command in the project directory
+```bash
+cp .env.example .env
+```
+5. Spin up the virtual machine
+```bash
+vagrant up
+```
+
+6. Once the above is complete, ssh into the virtual machine and cd to the code directory
+```bash
+vagrant ssh
+cd code
+```
+
+7. Generate the app key, this will be set in your .env file
+```bash
+art key:generate
+```
+
+8. Run the MySQL table migrations to set up the database,
+  - You can omit the --seed if you'd like to start with a blank database, otherwise this will seed the database with test data using faker.
+
+```bash
+art migrate:fresh --seed
+```
+
+9. Navigate to http://homestead.test
+- You should see the homepage
+
+## Running tests
+In the vagrant box run:
+`artisan test`
+
+This runs all the unit tests for the app and API.
+
 ## Wildlife Supreme Veterinary Practice Database API
 
 ## Base URL
@@ -15,7 +78,7 @@ https://wildlifesupreme.developme.space/api/
 
 ## Authentication
 
-In order to use the service you'll need to have an account created for you. Email me at nosvalds@gmail.com and I'll get you set up.
+In order to use the service you'll need to have an account created for you. Message me and I'll get you set up.
 
 Once you have the account information, make the following request to recieve a Bearer Token:
 
